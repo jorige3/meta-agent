@@ -1,4 +1,4 @@
 {
-    "bot_token": "7975804100:AAHqy2Kv9fBQLz5i3KbKi0-OzMYw0tYfZZU",
-    "chat_id": "7975962879"
+  "bot_token": "YOUR_TELEGRAM_BOT_TOKEN",
+  "chat_id": "YOUR_CHAT_ID"
 }

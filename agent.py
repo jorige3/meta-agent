@@ -7,6 +7,16 @@ from datetime import datetime
 from fpdf import FPDF, XPos, YPos
 import json # Import json for loading telegram config
 from telegram_notifier import notify_meta_agent_results # Import telegram notifier
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# ----------------------------
+# TELEGRAM CONFIGURATION
+# ----------------------------
+telegram_bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
+telegram_chat_id = os.getenv("TELEGRAM_CHAT_ID")
 
 # ----------------------------
 # CONFIGURATION

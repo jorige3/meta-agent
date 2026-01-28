@@ -14,7 +14,6 @@ Currently configured for **Sridevi market**.
 
 - `src/daily_predictor.py` → main daily engine
 - `.env` → Telegram credentials (ignored by git)
-- `config/telegram.example.json` → sample config
 - `reports/` → daily prediction outputs
 - `logs/` → runtime logs
 

@@ -113,23 +113,8 @@ if __name__ == "__main__":
     print(f"Running meta-agent for {TODAY}")
 
     # ======================
-    # Load Telegram Configuration
-    # ======================
-    telegram_bot_token = None
-    telegram_chat_id = None
-    try:
-        with open("config/telegram.json", "r") as f:
-            telegram_config = json.load(f)
-            telegram_bot_token = telegram_config.get("bot_token")
-            telegram_chat_id = telegram_config.get("chat_id")
-    except FileNotFoundError:
-        pass
-    except json.JSONDecodeError:
-        pass
-    except Exception as e:
-        pass
-
     # Run game-ai
+    # ======================
     game_output = run_command(GAME_AI_CMD, GAME_AI_PATH)
     game_digits, game_jodis = parse_game_ai(game_output)
 
@@ -175,5 +160,3 @@ if __name__ == "__main__":
         )
     else:
         print("ℹ️ Telegram disabled (env vars not set)")
-    else:
-        print("\nSkipping Telegram notification: Bot token or chat ID not configured.")

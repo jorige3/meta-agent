@@ -1,6 +1,10 @@
 import pandas as pd
 import os
 import sys
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 # Add path to jodi-analyzer-pro-v2 backtest engine
 sys.path.append("/home/kishore/sridevi/jodi-analyzer-pro-v2/src/backtest")
@@ -11,12 +15,17 @@ DATA_FILE = "/home/kishore/sridevi/jodi-analyzer-pro-v2/data/input/sridevi_data.
 META_REPORT_PATH = "reports/daily_prediction_report.csv"
 RAN_TODAY_FILE = "logs/ran_today.txt"
 
+# Telegram Configuration
+TELEGRAM_ENABLED = bool(
+    os.getenv("TELEGRAM_BOT_TOKEN") and
+    os.getenv("TELEGRAM_CHAT_ID")
+)
+
 # Optional: Telegram notifier import
 try:
     from telegram_notifier import send_telegram_message
-    TELEGRAM_ENABLED = True
 except ImportError:
-    TELEGRAM_ENABLED = False
+    pass
 
 def confidence_label(any_hit_rate):
     if any_hit_rate >= 60:
@@ -87,11 +96,6 @@ def run_daily_prediction():
     print(f"✅ Daily prediction report saved: {META_REPORT_PATH}")
     print(f"🎯 Today’s recommended digits: {digits_today}")
 
-    # Optional: send Telegram message
-    if TELEGRAM_ENABLED:
-        message = f"📊 Daily Prediction:\nDigits to play today: {digits_today}"
-        send_telegram_message(message)
-        print("✅ Telegram notification sent")
 
     return report_df, digits_today
 
@@ -110,6 +114,10 @@ if __name__ == "__main__":
     message = format_daily_message(today_digits, any_hit_rate)
 
     print(message)
+    
+    if TELEGRAM_ENABLED:
+        send_telegram_message(message)
+        print("✅ Telegram notification sent")
     
     mark_ran_today()
     print("✅ Daily signal completed")

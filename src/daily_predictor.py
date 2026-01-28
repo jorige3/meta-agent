@@ -1,14 +1,12 @@
-import pandas as pd
 import os
 import sys
 from dotenv import load_dotenv
 
-load_dotenv()
-
-
 # Add path to jodi-analyzer-pro-v2 backtest engine
 sys.path.append("/home/kishore/sridevi/jodi-analyzer-pro-v2/src/backtest")
 import engine_v5  # import your v5 engine
+
+load_dotenv()
 
 # Paths
 DATA_FILE = "/home/kishore/sridevi/jodi-analyzer-pro-v2/data/input/sridevi_data.csv"
@@ -36,7 +34,7 @@ def confidence_label(any_hit_rate):
         return "⚠️ RISK DAY"
 
 def get_today_digits(report_df):
-    last_played = report_df[report_df["played"] == True].iloc[-1]
+    last_played = report_df[report_df["played"]].iloc[-1]
     digits = last_played["digits_to_play"]
     return digits
 
@@ -85,7 +83,7 @@ def run_daily_prediction():
     report_df = engine_v5.backtest_v5(data_file=DATA_FILE)
 
     # Get the last day played
-    last_played = report_df[report_df['played'] == True].iloc[-1]
+    last_played = report_df[report_df['played']].iloc[-1]
 
     digits_today = last_played['digits_to_play']
 

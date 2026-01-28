@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import subprocess
-import sys
 import os
 import csv
 from datetime import datetime
@@ -109,7 +108,7 @@ def compute_agreement(d1, j1, d2, j2):
 # ----------------------------
 # MAIN EXECUTION
 # ----------------------------
-if __name__ == "__main__":
+def main():
     print(f"Running meta-agent for {TODAY}")
 
     # ======================
@@ -160,3 +159,6 @@ if __name__ == "__main__":
         )
     else:
         print("ℹ️ Telegram disabled (env vars not set)")
+
+if __name__ == "__main__":
+    main()

@@ -5,7 +5,6 @@ import os
 import csv
 from datetime import datetime
 from fpdf import FPDF, XPos, YPos
-import json # Import json for loading telegram config
 from telegram_notifier import notify_meta_agent_results # Import telegram notifier
 from dotenv import load_dotenv
 
@@ -15,8 +14,11 @@ load_dotenv()
 # ----------------------------
 # TELEGRAM CONFIGURATION
 # ----------------------------
-telegram_bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
-telegram_chat_id = os.getenv("TELEGRAM_CHAT_ID")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+
+def telegram_enabled():
+    return bool(TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID)
 
 # ----------------------------
 # CONFIGURATION
@@ -121,11 +123,11 @@ if __name__ == "__main__":
             telegram_bot_token = telegram_config.get("bot_token")
             telegram_chat_id = telegram_config.get("chat_id")
     except FileNotFoundError:
-        print("Telegram config file (config/telegram.json) not found. Skipping Telegram notifications.")
+        pass
     except json.JSONDecodeError:
-        print("Error decoding config/telegram.json. Skipping Telegram notifications.")
+        pass
     except Exception as e:
-        print(f"An unexpected error occurred while loading Telegram config: {e}. Skipping Telegram notifications.")
+        pass
 
     # Run game-ai
     game_output = run_command(GAME_AI_CMD, GAME_AI_PATH)
@@ -157,15 +159,21 @@ if __name__ == "__main__":
     # ======================
     # SEND TELEGRAM NOTIFICATION
     # ======================
-    if telegram_bot_token and telegram_chat_id:
-        print("\nSending Telegram notification...")
-        message_text = (
-            f"*Meta-Agent Consensus Report - {TODAY}*\n\n"
-            f"Agreement Level: *{agreement}*\n"
-            f"Common Digits: `{', '.join(common_digits) or 'None'}`\n"
-            f"Common Jodis: `{', '.join(common_jodis) or 'None'}`\n"
-            f"Final Note: {'High confidence!' if agreement=='HIGH' else 'Use with caution!'}"
+    message_text = (
+        f"*Meta-Agent Consensus Report - {TODAY}*\n\n"
+        f"Agreement Level: *{agreement}*\n"
+        f"Common Digits: `{', '.join(common_digits) or 'None'}`\n"
+        f"Common Jodis: `{', '.join(common_jodis) or 'None'}`\n"
+        f"Final Note: {'High confidence!' if agreement=='HIGH' else 'Use with caution!'}"
+    )
+    
+    if telegram_enabled():
+        notify_meta_agent_results(
+            TELEGRAM_BOT_TOKEN,
+            TELEGRAM_CHAT_ID,
+            message_text
         )
-        notify_meta_agent_results(telegram_bot_token, telegram_chat_id, message_text)
+    else:
+        print("ℹ️ Telegram disabled (env vars not set)")
     else:
         print("\nSkipping Telegram notification: Bot token or chat ID not configured.")

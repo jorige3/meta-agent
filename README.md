@@ -13,7 +13,7 @@ Currently configured for **Sridevi market**.
 ## 📁 Project Structure
 
 - `src/daily_predictor.py` → main daily engine
-- `config/telegram.json` → real Telegram credentials (ignored by git)
+- `.env` → Telegram credentials (ignored by git)
 - `config/telegram.example.json` → sample config
 - `reports/` → daily prediction outputs
 - `logs/` → runtime logs
@@ -26,3 +26,20 @@ Currently configured for **Sridevi market**.
 source venv/bin/activate
 python src/daily_predictor.py
 
+### Telegram Configuration
+
+Create a `.env` file:
+
+```env
+TELEGRAM_BOT_TOKEN=your_bot_token_here
+TELEGRAM_CHAT_ID=your_chat_id_here
+
+
+---
+
+## ✅ STEP 3: Verify cleanup
+
+Run these commands:
+
+```bash
+git grep -i telegram.json

@@ -201,10 +201,6 @@ def main():
         "common_jodis": common_jodis,
     }
 
-    # Generate reports
-    generate_pdf(report)
-    generate_csv(report)
-
     # Print summary
     print("=== CONSENSUS REPORT ===")
     print(f"Agreement Level: {agreement}")
@@ -213,6 +209,10 @@ def main():
     print(
         f"Final Note: {'High confidence!' if agreement == 'HIGH' else 'Use with caution!'}"
     )
+
+    # Generate reports
+    generate_pdf(report)
+    generate_csv(report)
 
     # ======================
     # SEND TELEGRAM NOTIFICATION

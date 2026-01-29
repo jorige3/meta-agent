@@ -1,0 +1,38 @@
+meta:
+  name: "Meta Agent"
+  date_format: "%Y-%m-%d"
+  market: "Default Market"
+
+paths:
+  base_dir: "." # Current directory
+  
+engines:
+  - name: "Example Engine"
+    key: "example_engine"
+    enabled: true
+    working_dir: "."
+    command: "echo 'Example Engine Output: Digits: 1,2,3 Jodis: 12,23,34'" # Placeholder command
+
+parsing:
+  digits:
+    regex: "Digits: ([\\d, ]+)"
+    separator: ","
+  jodis:
+    regex: "Jodis: ([\\d, ]+)"
+    separator: ","
+
+consensus:
+  agreement_levels:
+    high: 2
+    medium: 1
+
+output:
+  reports_dir: "reports"
+  csv:
+    filename: "consensus_report.csv"
+  pdf:
+    filename: "consensus_report.pdf"
+
+telegram:
+  bot_token: "YOUR_TELEGRAM_BOT_TOKEN"
+  chat_id: "YOUR_TELEGRAM_CHAT_ID"

@@ -2,6 +2,7 @@ import logging
 import asyncio
 from telegram import Bot
 
+
 async def send_telegram_message(bot_token, chat_id, message):
     """
     Sends a message to the configured Telegram chat.
@@ -26,14 +27,18 @@ async def send_telegram_message(bot_token, chat_id, message):
         logging.error(f"Failed to send Telegram notification: {e}", exc_info=True)
         return False
 
+
 def notify_meta_agent_results(bot_token, chat_id, message_text):
     """
     Sends a formatted message for Meta Agent results via Telegram.
     """
     return asyncio.run(send_telegram_message(bot_token, chat_id, message_text))
 
+
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+    logging.basicConfig(
+        level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    )
     # Example usage for testing
     test_bot_token = "YOUR_TELEGRAM_BOT_TOKEN"
     test_chat_id = "YOUR_TELEGRAM_CHAT_ID"

@@ -15,8 +15,7 @@ RAN_TODAY_FILE = "logs/ran_today.txt"
 
 # Telegram Configuration
 TELEGRAM_ENABLED = bool(
-    os.getenv("TELEGRAM_BOT_TOKEN") and
-    os.getenv("TELEGRAM_CHAT_ID")
+    os.getenv("TELEGRAM_BOT_TOKEN") and os.getenv("TELEGRAM_CHAT_ID")
 )
 
 # Optional: Telegram notifier import
@@ -24,6 +23,7 @@ try:
     from telegram_notifier import send_telegram_message
 except ImportError:
     pass
+
 
 def confidence_label(any_hit_rate):
     if any_hit_rate >= 60:
@@ -33,10 +33,12 @@ def confidence_label(any_hit_rate):
     else:
         return "⚠️ RISK DAY"
 
+
 def get_today_digits(report_df):
     last_played = report_df[report_df["played"]].iloc[-1]
     digits = last_played["digits_to_play"]
     return digits
+
 
 def format_daily_message(digits, any_hit_rate):
     label = confidence_label(any_hit_rate)
@@ -44,7 +46,7 @@ def format_daily_message(digits, any_hit_rate):
     msg = f"""
 🎯 DAILY GAME SIGNAL
 
-Digits to Play: {' '.join(map(str, digits))}
+Digits to Play: {" ".join(map(str, digits))}
 Confidence    : {label}
 
 Rules:
@@ -57,23 +59,28 @@ Rules:
 """
     return msg.strip()
 
+
 def already_ran_today():
     """Check if the script has already run today."""
     from datetime import datetime
+
     today = datetime.now().strftime("%Y-%m-%d")
     if os.path.exists(RAN_TODAY_FILE):
-        with open(RAN_TODAY_FILE, 'r') as f:
+        with open(RAN_TODAY_FILE, "r") as f:
             last_ran = f.read().strip()
         return last_ran == today
     return False
 
+
 def mark_ran_today():
     """Mark that the script ran today."""
     from datetime import datetime
+
     today = datetime.now().strftime("%Y-%m-%d")
     os.makedirs(os.path.dirname(RAN_TODAY_FILE), exist_ok=True)
-    with open(RAN_TODAY_FILE, 'w') as f:
+    with open(RAN_TODAY_FILE, "w") as f:
         f.write(today)
+
 
 def run_daily_prediction():
     """
@@ -83,9 +90,9 @@ def run_daily_prediction():
     report_df = engine_v5.backtest_v5(data_file=DATA_FILE)
 
     # Get the last day played
-    last_played = report_df[report_df['played']].iloc[-1]
+    last_played = report_df[report_df["played"]].iloc[-1]
 
-    digits_today = last_played['digits_to_play']
+    digits_today = last_played["digits_to_play"]
 
     # Save meta-agent report
     os.makedirs(os.path.dirname(META_REPORT_PATH), exist_ok=True)
@@ -94,8 +101,8 @@ def run_daily_prediction():
     print(f"✅ Daily prediction report saved: {META_REPORT_PATH}")
     print(f"🎯 Today’s recommended digits: {digits_today}")
 
-
     return report_df, digits_today
+
 
 if __name__ == "__main__":
     if already_ran_today():
@@ -103,7 +110,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     report_df, _ = run_daily_prediction()
-    
+
     today_digits = get_today_digits(report_df)
 
     # engine v5 known performance
@@ -112,10 +119,10 @@ if __name__ == "__main__":
     message = format_daily_message(today_digits, any_hit_rate)
 
     print(message)
-    
+
     if TELEGRAM_ENABLED:
         send_telegram_message(message)
         print("✅ Telegram notification sent")
-    
+
     mark_ran_today()
     print("✅ Daily signal completed")

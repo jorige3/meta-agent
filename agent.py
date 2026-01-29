@@ -121,12 +121,14 @@ def generate_pdf(report):
         new_x=XPos.LMARGIN,
         new_y=YPos.NEXT,
     )
-    pdf.output(PDF_REPORT)
-    print(f"✅ PDF saved: {PDF_REPORT}")
+    full_pdf_path = os.path.abspath(PDF_REPORT).replace("sridevi_night", "sridevi")
+    pdf.output(full_pdf_path)
+    print(f"✅ PDF saved: {full_pdf_path}")
 
 
 def generate_csv(report):
-    with open(CSV_REPORT, "w", newline="") as f:
+    full_csv_path = os.path.abspath(CSV_REPORT).replace("sridevi_night", "sridevi")
+    with open(full_csv_path, "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(["Date", "Agreement", "Common Digits", "Common Jodis", "Note"])
         writer.writerow(
@@ -140,7 +142,7 @@ def generate_csv(report):
                 else "Use with caution!",
             ]
         )
-    print(f"✅ CSV saved: {CSV_REPORT}")
+    print(f"✅ CSV saved: {full_csv_path}")
 
 
 def compute_agreement(d1, j1, d2, j2):
@@ -166,12 +168,28 @@ def main():
     # ======================
     # Run game-ai
     # ======================
+    print("▶ Running engine: game-ai")
     game_output = run_command(GAME_AI_CMD, GAME_AI_PATH)
     game_digits, game_jodis = parse_game_ai(game_output)
+    # Manually construct and print engine log path for game-ai
+    game_ai_log_path = os.path.join("reports", "engine_logs", f"game-ai_{TODAY}.log")
+    full_game_ai_log_path = os.path.abspath(game_ai_log_path).replace(
+        "sridevi_night", "sridevi"
+    )
+    print(f"   Engine log: {full_game_ai_log_path}")
 
     # Run jodi-analyzer-pro-v2
+    print("▶ Running engine: jodi-analyzer-pro-v2")
     jodi_output = run_command(JODI_CMD, JODI_PATH)
     jodi_digits, jodi_jodis = parse_jodi(jodi_output)
+    # Manually construct and print engine log path for jodi-analyzer-pro-v2
+    jodi_log_path = os.path.join(
+        "reports", "engine_logs", f"jodi-analyzer-pro-v2_{TODAY}.log"
+    )
+    full_jodi_log_path = os.path.abspath(jodi_log_path).replace(
+        "sridevi_night", "sridevi"
+    )
+    print(f"   Engine log: {full_jodi_log_path}")
 
     # Compute consensus
     agreement, common_digits, common_jodis = compute_agreement(

@@ -27,16 +27,16 @@ def telegram_enabled():
 TODAY = datetime.now().strftime("%Y-%m-%d")
 
 # Paths to projects
-GAME_AI_PATH = "/home/kishore/sridevi/game_ai"
-JODI_PATH = "/home/kishore/sridevi/jodi-analyzer-pro-v2"
+GAME_AI_PATH = "../game_ai"
+JODI_PATH = "../jodi-analyzer-pro-v2"
 
 # Commands
-GAME_AI_CMD = "/home/kishore/sridevi/game_ai/venv/bin/python run_automation.py"
-JODI_CMD = "/home/kishore/sridevi/jodi-analyzer-pro-v2/venv/bin/python pro_agent.py"
+GAME_AI_CMD = "../game_ai/venv/bin/python run_automation.py"
+JODI_CMD = "../jodi-analyzer-pro-v2/venv/bin/python pro_agent.py"
 
 # Output files
-PDF_REPORT = "meta_report.pdf"
-CSV_REPORT = "meta_report.csv"
+PDF_REPORT = "reports/meta_report.pdf"
+CSV_REPORT = "reports/meta_report.csv"
 
 
 # ----------------------------
